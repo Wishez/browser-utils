@@ -1,0 +1,11 @@
+{
+  "name": "browser-utils",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "git@github.com:Wishez/browser-utils.git",
+  "author": "Журавлёв Филипп <fzhuravlev@fil-it.ru>",
+  "license": "MIT",
+  "dependencies": {
+    "js-cookie": "^2.2.1"
+  }
+}

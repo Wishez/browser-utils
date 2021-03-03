@@ -1,3 +1,5 @@
-# Motivation
-
 # Usage
+
+Alt+T Пунто свитчер
+Alt+A Установить access_token в куки
+Alt+э Скопировать в буффер кавычки-ёлочки

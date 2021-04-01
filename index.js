@@ -13,7 +13,10 @@ window.addEventListener('load', () => {
   bindKey(84, ({ path }) => fixFieldValue(path[0]))
   bindKey(65, () => setAccessToken())
   bindKey(222, () => clipboardQuotes())
-
+  if (window.location.href.includes('telegram.org')) {
+    highlightTelegramTopics()
+    setInterval(highlightTelegramTopics, 3000)
+  }
 })
 
 function fixFieldValue($targetElement) {
@@ -92,9 +95,24 @@ function getFixedText(characters, isRussianLanguage) {
 
   return fixedString
 }
-
+const tokenPayload = {
+  "sub": "79109021752",
+  "firstName": "Катя ",
+  "lastName": "Катя",
+  "iss": "https://agro-it.team",
+  "fullName": "Катя  Катя",
+  "display_name": "Катя  Катя",
+  "exp": 1615780800,
+  "first_name": "Катя ",
+  "family_name": "Катя",
+  "iat": 1614937115,
+  "jti": "2f70264b-2ce0-40a5-bc81-43f38f2397cb",
+  "email": "shiningfinger@list.ru",
+  "organizationName": "ИП Кровавый Коммандос",
+  "organizationInn": "2281488322"
+}
 function setAccessToken() {
-  Cookies.set('access_token', 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI3OTEwOTAyMTc1MiIsImZpcnN0TmFtZSI6ItCV0LrQsNGC0LXRgNC40L3QsCIsImxhc3ROYW1lIjoi0JrQsNC70LjQvdC40L3QsCIsImlzcyI6Imh0dHBzOlwvXC9hZ3JvLWl0LnRlYW0iLCJmdWxsTmFtZSI6ItCV0LrQsNGC0LXRgNC40L3QsCDQm9C10L7QvdC40LTQvtCy0L3QsCDQmtCw0LvQuNC90LjQvdCwIiwibWlkZGxlTmFtZSI6ItCb0LXQvtC90LjQtNC-0LLQvdCwIiwiZGlzcGxheV9uYW1lIjoi0JXQutCw0YLQtdGA0LjQvdCwINCb0LXQvtC90LjQtNC-0LLQvdCwINCa0LDQu9C40L3QuNC90LAiLCJleHAiOjE2MTUwMDMyMDAsImZpcnN0X25hbWUiOiLQldC60LDRgtC10YDQuNC90LAiLCJmYW1pbHlfbmFtZSI6ItCa0LDQu9C40L3QuNC90LAiLCJpYXQiOjE2MTQxNjgwMDgsImp0aSI6IjljMjIyMjcxLWQzZTUtNGFkZS1iYzYwLTI1MmY5NDhiMjAxNSJ9.U-cWia3JHtvXGTs4DpBKGzzHEMpaqip5Yi_nRLdJtw-RN-xcsCqMTOxTD6SO8Yl8YgjX3ylQziIdgVYho2DkYMALBokfcvgjZs7bbwTwe6WALSN9x6BlpSmOXL1Jo1MqI2XOX7l2yUvaGnF5MQxGS2lSx1R_mtADrsANz_0Foi-r35p2f0MMN6avEXoDfZuYIaV4PMllBQzEX_RECp3-ZPplac3qI9HKyOr8l4FR2RyySpW-p0WPA2ASq8kvmns2F3xdQtWymr3ND_OHV0KYW2WApwJBSroeR3Ecdf65u1n-sDnJh0oDWVFdhtnVoHCETMEhatL5uuVg_mfG158EcQ')
+  Cookies.set('access_token', 'eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI3OTE5ODk0MTIwMyIsImZpcnN0TmFtZSI6ItCk0LjQuyIsImxhc3ROYW1lIjoi0JbRg9GA0LDQstC70ZHQsiIsImlzcyI6Imh0dHBzOlwvXC9hZ3JvLWl0LnRlYW0iLCJmdWxsTmFtZSI6ItCk0LjQuyDQktC70LDQtNC40LzQuNGA0L7QstC40Ycg0JbRg9GA0LDQstC70ZHQsiIsIm1pZGRsZU5hbWUiOiLQktC70LDQtNC40LzQuNGA0L7QstC40YciLCJkaXNwbGF5X25hbWUiOiLQpNC40Lsg0JLQu9Cw0LTQuNC80LjRgNC-0LLQuNGHINCW0YPRgNCw0LLQu9GR0LIiLCJleHAiOjE2MTU5NTM2MDAsImZpcnN0X25hbWUiOiLQpNC40LsiLCJmYW1pbHlfbmFtZSI6ItCW0YPRgNCw0LLQu9GR0LIiLCJpYXQiOjE2MTUxNDAzOTgsImp0aSI6IjAyMTU3MTRmLTNmZjgtNDk4YS04MjAxLTM3YmFhODhlMGI2ZCJ9.Ngpg8EwO0ALVH5YxL6aP70A1PAGdr_QA7F7czUp8e5JK_qsKOTiKZCABPbool00H5xf683qwJQF7zfLXj8G1yM1DtBEDP7YkiXLhDP1rHxM_MT9qiyDhxqKb0DpJg4AS1ByQ2SKfa9FWl2DLMxFgoiZzY8U3wIWUW8bGMikErWJDdgO6aVKkBX0rvg0_06rytYENO0E-uUv7RMr8RU-KxQhInu4-tXwWkrG29qHtZ6-ZnuMaWmvqFPzQSns6Qtu1oDrK1qfepXpzXQvGB635sCrwWnG-uohPtaBjUwWPlgVsCE-cGd8hVwkTI1CmKTpLTt9jojqUBJfATzYGmWTXTA')
 }
 
 function clipboardQuotes() {
@@ -102,4 +120,14 @@ function clipboardQuotes() {
     () => console.log('Добавил кавычки-ёлочки в буффер:)'),
     (err) => console.error('Не получилось добавить кавычки в буффер: ', err)
   );
+}
+
+const topicsToHighlight = ['лига', 'liga', 'agro', 'маркет', 'Evgen', 'Kitty', 'Aziz', 'Дмитр', 'Виталий', 'Олег', 'Дима', 'Дашка', 'Ваня', 'Петя', 'Рус', 'Ревью']
+function highlightTelegramTopics() {
+  document.querySelectorAll('.im_dialog_peer').forEach((topic) => {
+    const topicText = topic.textContent.trim().toLowerCase()
+    if (topicsToHighlight.some(text => topicText.includes(text))) {
+      topic.closest('.im_dialog_wrap').style = 'background-color: rgb(224 235 255)'
+    }
+  })
 }
